@@ -1,0 +1,18 @@
+[project]
+name = "banco-dados-2"
+version = "0.1.0"
+description = "Sistema de Gerenciamento de Mangás - Trabalho BD II"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.17.1",
+    "sqlalchemy>=2.0.44",
+    "python-dotenv>=1.0.0",
+    "bcrypt>=5.0.0",
+    "psycopg2-binary>=2.9.11",
+]
+
+[project.scripts]
+migrations = "alembic.versions:001_criacao_inicial"
+seed = "alembic.seed_data:seed"
+dev = "main:main"
