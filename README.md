@@ -17,7 +17,6 @@ O objetivo acadêmico é demonstrar a evolução da modelagem conceitual, lógic
 ├── app/
 │   ├── src/
 │   │   ├── models/
-│   │   ├── controllers/
 │   │   ├── database/
 │   │   └── main.py
 │   ├── requirements.txt
@@ -90,11 +89,11 @@ No segundo passo você irá abrir no Docker o container: "manga_App" e ir em "EX
 
 Os comandos serão:
 
-uv run python -m alambic upgrade head(para fazer o migration de dados)
+uv run python -m alembic upgrade head(para fazer o migration de dados)
 
-uv run python -m alambic seed_data.py (para ppopular o banco)
+uv run python -m alembic seed_data.py (para ppopular o banco)
 
-uv run python -m app_cli.py (para carregar o menu interarivo)
+uv run python -m app_cli (para carregar o menu interarivo)
 
 
 
@@ -112,7 +111,7 @@ Utilizamos o DBEAVER para visualizar as tabelas utilizando os seguintes passos:
 - usuario: manga_user
 - senha: manga_pass
 
-aparece o mangasystem e segue o caminho
+ O banco mangasystem já deve estar funcionando e segue o caminho para ver as tabelas:
 
 Mangasystem > Banco de Dados > manga_system > esquemas > public > tabelas
 
