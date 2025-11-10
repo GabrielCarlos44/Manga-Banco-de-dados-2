@@ -57,8 +57,8 @@ Antes de executar a aplicação, certifique-se de possuir:
 ### 5.1 Clonar o repositório
 
 ```sh
-git clone https://github.com/GabrielCarlos44/Manga-Banco-de-dados-2/tree/0798581eabcf94777760c287e49e742e359b4242/banco-dados-2
-cd <seu-repositorio>
+git clone https://github.com/GabrielCarlos44/Manga-Banco-de-dados-2.git
+cd Manga-Banco-de-dados-2
 ```
 
 ### 5.2 Subir a aplicação com Docker
@@ -73,8 +73,9 @@ O banco de dados estará disponível em:
 ```
 host: localhost
 porta: 5432
-usuário: postgres
-senha: postgres
+banco de dados: manga_system
+usuário: manga_user
+senha: manga_pass
 ```
 
 ---
@@ -121,5 +122,5 @@ Mangasystem > Banco de Dados > manga_system > esquemas > public > tabelas
 Projeto desenvolvido para fins acadêmicos por:
 
 **Gabriel Carlos Nascimento Machado**  
-**Josue Xavier**
+**Josue Xavier Silva**
 Disciplina: Banco de Dados II – Universidade Federal do Sul e Sudeste do Pará (UNIFESSPA)
