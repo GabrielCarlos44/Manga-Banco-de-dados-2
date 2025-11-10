@@ -98,7 +98,7 @@ uv run python -m app_cli.py (para carregar o menu interarivo)
 
 
 
-## 7. Obsevando o banco de dados
+## 7. Observando o banco de dados
 
 Nessa aplicação utilizamos o db Postgres
 
