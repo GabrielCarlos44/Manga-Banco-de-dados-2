@@ -80,7 +80,7 @@ senha: manga_pass
 
 ---
 
-## 6. Execeutando a aplicação
+## 6. Executando a aplicação
 
 Para executar a aplicação é necessário os seguintes comandos:
 
