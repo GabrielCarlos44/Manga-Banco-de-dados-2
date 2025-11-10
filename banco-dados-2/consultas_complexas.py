@@ -165,117 +165,6 @@ def consulta_2_leitores_ativos_por_genero():
     finally:
         session.close()
 
-
-def consulta_3_generos_popularidade():
-    """
-    Consulta Complexa 3: Estatísticas de Gêneros por Popularidade
-    
-    Utiliza:
-    - Múltiplos JOINs
-    - Agregações múltiplas (COUNT, AVG)
-    - Filtro com HAVING
-    - Subconsulta correlacionada
-    """
-    print("\n" + "="*80)
-    print("CONSULTA 3: Estatísticas de Gêneros (popularidade e avaliações)")
-    print("="*80 + "\n")
-    
-    session = get_session()
-    
-    try:
-        resultados = (
-            session.query(
-                Genero.tipo_genero,
-                func.count(func.distinct(MangaGenero.id_manga)).label('total_mangas'),
-                func.count(func.distinct(LeitorManga.id_leitor)).label('total_leitores'),
-                func.avg(Avaliacao.nota).label('media_avaliacoes'),
-                func.sum(
-                    case((MangaGenero.principal == True, 1), else_=0)
-                ).label('vezes_principal')
-            )
-            .join(MangaGenero, Genero.id_genero == MangaGenero.id_genero)
-            .join(Manga, MangaGenero.id_manga == Manga.id_manga)
-            .outerjoin(LeitorManga, Manga.id_manga == LeitorManga.id_manga)
-            .outerjoin(Avaliacao, Manga.id_manga == Avaliacao.id_manga)
-            .group_by(Genero.id_genero, Genero.tipo_genero)
-            .order_by(desc('total_leitores'), desc('media_avaliacoes'))
-            .all()
-        )
-        
-        print(f"{'Gênero':<20} {'Total Mangás':<15} {'Leitores':<12} {'Média Aval.':<15} {'Vezes Principal':<18}")
-        print("-" * 85)
-        
-        for genero, mangas, leitores, media, principal in resultados:
-            media_str = f"{media:.2f}" if media else "N/A"
-            print(f"{genero:<20} {mangas:>13} {leitores:>10} {media_str:>13} {principal:>16}")
-        
-        print(f"\n✓ Total de gêneros analisados: {len(resultados)}")
-        
-    finally:
-        session.close()
-
-
-def consulta_4_mangas_detalhados_eager_loading():
-    """
-    Consulta Complexa 4: Mangás com Relacionamentos (Eager Loading)
-    
-    Utiliza:
-    - joinedload para carregar relacionamentos
-    - selectinload para coleções
-    - Filtros compostos com OR
-    - Acesso a relacionamentos aninhados
-    """
-    print("\n" + "="*80)
-    print("CONSULTA 4: Mangás Detalhados com Gêneros e Capítulos (Eager Loading)")
-    print("="*80 + "\n")
-    
-    session = get_session()
-    
-    try:
-        # Query com eager loading de múltiplos relacionamentos
-        mangas = (
-            session.query(Manga)
-            .options(
-                selectinload(Manga.manga_generos).joinedload(MangaGenero.genero),
-                selectinload(Manga.capitulos),
-                selectinload(Manga.avaliacoes)
-            )
-            .filter(
-                or_(
-                    Manga.status == 'EM_ANDAMENTO',
-                    Manga.titulo_manga.ilike('%naruto%')
-                )
-            )
-            .all()
-        )
-        
-        for manga in mangas:
-            print(f"\n📚 {manga.titulo_manga} - {manga.autor}")
-            print(f"   Status: {manga.status.value}")
-            print(f"   Data de Criação: {manga.data_criacao.strftime('%d/%m/%Y %H:%M')}")
-            
-            # Gêneros (sem query adicional por causa do eager loading)
-            generos = [mg.genero.tipo_genero + (' ⭐' if mg.principal else '') 
-                      for mg in manga.manga_generos]
-            print(f"   Gêneros: {', '.join(generos)}")
-            
-            # Capítulos
-            print(f"   Capítulos: {len(manga.capitulos)}")
-            for cap in manga.capitulos[:3]:  # Mostrar apenas os 3 primeiros
-                print(f"      - Cap. {cap.numero_capitulo}: {cap.titulo_capitulo} ({cap.numero_paginas} páginas)")
-            
-            # Avaliações
-            if manga.avaliacoes:
-                media = sum(av.nota for av in manga.avaliacoes) / len(manga.avaliacoes)
-                print(f"   Avaliações: {len(manga.avaliacoes)} (Média: {media:.2f})")
-        
-        print(f"\n✓ Total de mangás encontrados: {len(mangas)}")
-        print("✓ Todos os relacionamentos carregados com Eager Loading (sem N+1 queries)")
-        
-    finally:
-        session.close()
-
-
 def comparacao_orm_vs_sql_direto():
     """
     Demonstração: Comparação entre ORM e SQL Direto
@@ -344,8 +233,6 @@ if __name__ == "__main__":
     try:
         consulta_1_top_mangas_avaliados()
         consulta_2_leitores_ativos_por_genero()
-        consulta_3_generos_popularidade()
-        consulta_4_mangas_detalhados_eager_loading()
         comparacao_orm_vs_sql_direto()
         
         print("\n" + "="*80)
